@@ -5,7 +5,7 @@ SpriteSystem.filter = tiny.requireAll('image', 'position')
 SpriteSystem.drawingsystem = true
 
 function SpriteSystem:process(e, dt)
-    love.graphics.reset()
+    love.graphics.zero()
     local rotation = e.rotation or 0
     local sx, sy = e.scale and e.scale.x or 1, e.scale and e.scale.y or 1
 
@@ -19,6 +19,11 @@ function SpriteSystem:process(e, dt)
         love.graphics.setColor(0, 255, 0, 150)
         love.graphics.rectangle('line', -e.origin.x, -e.origin.y, e.width, e.height)
         love.graphics.pop()
+        
+        if e.hitbox then
+            love.graphics.setColor(255, 0, 0, 150)
+            e.hitbox:draw('fill')
+        end
     end
 end
 

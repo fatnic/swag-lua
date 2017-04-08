@@ -3,6 +3,8 @@ local keys = {
     down  = {'key:down', 'key:s'},
     left  = {'key:left', 'key:a'},
     right = {'key:right', 'key:d'},
+
+    debug = { 'key:f1' },
 }
 
 return keys

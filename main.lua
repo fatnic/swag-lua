@@ -3,6 +3,7 @@ class = require 'ext.middleclass'
 tiny  = require 'ext.tiny'
 sti   = require 'ext.sti'
 baton = require 'ext.baton'
+HC    = require 'ext.HC'
 
 -- local libraries
 Wall = require 'libs.wall'
@@ -12,6 +13,7 @@ MovementSystem = require 'src.systems.movement'
 ControllableSystem = require 'src.systems.controllable'
 LookAtSystem = require 'src.systems.lookat'
 MouseFollowSystem = require 'src.systems.mousefollow'
+CollidableSystem = require 'src.systems.collidable'
 
 -- drawing systems
 TileRendererSystem = require 'src.systems.tilerenderer'
@@ -19,7 +21,7 @@ SpriteSystem       = require 'src.systems.sprite'
 
 -- system filters
 drawingSystems = tiny.requireAll('drawingsystem')
-updateSystems = tiny.rejectAll('drawingsystem')
+updateSystems  = tiny.rejectAll('drawingsystem')
 
 -- entities
 Character = require 'src.entities.character'
@@ -30,9 +32,9 @@ assets = require 'assets'
 keys = require 'keys'
 
 World = {}
-World.debug = true
+World.debug = false
 
-love.graphics.reset = function()
+love.graphics.zero = function()
     love.graphics.setColor(255, 255, 255)
     love.graphics.setStencilTest()
     love.graphics.setShader()
@@ -49,6 +51,7 @@ function love.load()
     World.ecs:addSystem(ControllableSystem())
     World.ecs:addSystem(MouseFollowSystem())
     World.ecs:addSystem(LookAtSystem())
+    World.ecs:addSystem(CollidableSystem())
 
     player = Player:new(50, 50)
     World.ecs:addEntity(player)
@@ -59,6 +62,8 @@ end
 function love.update(dt)
     love.window.setTitle('swag - ' .. love.timer.getFPS() .. ' fps')
     World.input:update()
+
+    if World.input:pressed 'debug' then World.debug = not World.debug end
     World.ecs:update(dt, updateSystems)
 end
 

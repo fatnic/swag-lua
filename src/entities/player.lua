@@ -10,6 +10,8 @@ function Player:initialize(x, y, args)
     
     self.controllable = true
     self.followmouse = true
+
+    self.collidable = true
 end
 
 function Player:update(dt)
