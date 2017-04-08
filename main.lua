@@ -3,17 +3,14 @@ class = require 'ext.middleclass'
 tiny  = require 'ext.tiny'
 sti   = require 'ext.sti'
 baton = require 'ext.baton'
-HC    = require 'ext.HC'
 
 -- local libraries
 Wall = require 'libs.wall'
 
 -- update systems
-MovementSystem = require 'src.systems.movement'
 ControllableSystem = require 'src.systems.controllable'
 LookAtSystem = require 'src.systems.lookat'
 MouseFollowSystem = require 'src.systems.mousefollow'
-CollidableSystem = require 'src.systems.collidable'
 
 -- drawing systems
 TileRendererSystem = require 'src.systems.tilerenderer'
@@ -44,14 +41,13 @@ function love.load()
     World.ecs = tiny.world()
     World.map = sti('assets/maps/swag.lua')
     World.input = baton.new(keys)
+    World.physics = love.physics.newWorld(0, 0, true)
 
     World.ecs:addSystem(TileRendererSystem())
     World.ecs:addSystem(SpriteSystem())
-    World.ecs:addSystem(MovementSystem())
     World.ecs:addSystem(ControllableSystem())
     World.ecs:addSystem(MouseFollowSystem())
     World.ecs:addSystem(LookAtSystem())
-    World.ecs:addSystem(CollidableSystem())
 
     player = Player:new(50, 50)
     World.ecs:addEntity(player)
@@ -62,6 +58,7 @@ end
 function love.update(dt)
     love.window.setTitle('swag - ' .. love.timer.getFPS() .. ' fps')
     World.input:update()
+    World.physics:update(dt)
 
     if World.input:pressed 'debug' then World.debug = not World.debug end
     World.ecs:update(dt, updateSystems)
