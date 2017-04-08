@@ -10,6 +10,11 @@ end
 function CollidableSystem:process(e, dt)
     e.hitbox:moveTo(e.position.x, e.position.y)
     e.hitbox:setRotation(e.rotation)
+
+    for _, wall in pairs(World.walls) do
+        if e.hitbox:collidesWith(wall.hitbox) then
+        end
+    end
 end
 
 return CollidableSystem

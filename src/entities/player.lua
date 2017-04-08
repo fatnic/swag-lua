@@ -6,7 +6,7 @@ function Player:initialize(x, y, args)
 
     self.velocity = { x = 0, y = 0 }
     self.target = { x = 0, y = 0 }
-    self.speed = 30
+    self.speed = 17
     
     self.controllable = true
     self.followmouse = true
