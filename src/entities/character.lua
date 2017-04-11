@@ -4,15 +4,16 @@ function Character:initialize(image, x, y, args)
     local args = args or {}
 
     self.image = image
+    self.layer1 = true
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
+
     self.speed = 400
 
     self.body    = love.physics.newBody(World.physics, x + self.width / 2, y + self.height / 2, 'dynamic')
     self.shape   = love.physics.newRectangleShape(self.width, self.height)
     self.fixture = love.physics.newFixture(self.body, self.shape, 1)
-    self.body:setLinearDamping(5)
-    self.body:setFixedRotation(true)
+    self.body:setLinearDamping(6)
 end
 
 function Character:moveLeft(dt)

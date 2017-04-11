@@ -5,6 +5,7 @@ local keys = {
     right = {'key:right', 'key:d'},
 
     debug = { 'key:f1' },
+    doors = { 'key:r' },
 }
 
 return keys
