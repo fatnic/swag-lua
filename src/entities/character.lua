@@ -14,6 +14,10 @@ function Character:initialize(image, x, y, args)
     self.shape   = love.physics.newRectangleShape(self.width, self.height)
     self.fixture = love.physics.newFixture(self.body, self.shape, 1)
     self.body:setLinearDamping(6)
+
+    self.x, self.y = self.body:getPosition()
+
+    self.updatable = true
 end
 
 function Character:moveLeft(dt)
@@ -30,6 +34,10 @@ end
 
 function Character:moveUp(dt)
     self.body:applyForce(0, -self.speed)
+end
+
+function Character:update(dt)
+    self.x, self.y = self.body:getPosition()
 end
 
 return Character

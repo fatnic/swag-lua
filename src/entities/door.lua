@@ -24,7 +24,7 @@ function Door:toggle()
     offset = tools.ternary(self.direction % 2 == 0, -offset, offset)
 
     local doorpos = { x = x, y = y }
-    flux.to(doorpos, 1, { x = x + offset }):ease('cubicinout'):onstart(function() 
+    flux.to(doorpos, 0.75, { x = x + offset }):ease('cubicinout'):onstart(function() 
         self.activated = true
     end):onupdate(function() 
         self.body:setPosition(doorpos.x, doorpos.y)

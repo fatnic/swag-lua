@@ -2,7 +2,7 @@ local SpriteSystem = tiny.processingSystem(class('SpriteSystem'))
 
 SpriteSystem.drawingsystem = true
 
-SpriteSystem.filter = tiny.requireAll('image', tiny.requireAny('position', 'body'))
+SpriteSystem.filter = tiny.requireAll('image', tiny.requireAny('x', 'y', 'body'))
 
 function SpriteSystem:process(e, dt)
     love.graphics.zero()
@@ -11,7 +11,7 @@ function SpriteSystem:process(e, dt)
         love.graphics.draw(e.image, e.body:getX(), e.body:getY(), e.body:getAngle(), 1, 1, e.width / 2, e.height / 2)
     else
         local rotation = e.rotation or 0
-        love.graphics.draw(e.image, e.position.x, e.position.y, rotation)
+        love.graphics.draw(e.image, e.x, e.y, rotation)
     end
 
     if World.debug then
@@ -19,7 +19,7 @@ function SpriteSystem:process(e, dt)
         if e.body then
             love.graphics.polygon('fill', e.body:getWorldPoints(e.shape:getPoints()))
         else
-            love.graphics.rectangle('fill', e.position.x, e.position.y, e.image:getWidth(), e.image:getHeight())
+            love.graphics.rectangle('fill', e.x, e.y, e.width, e.height)
         end
     end
 end
