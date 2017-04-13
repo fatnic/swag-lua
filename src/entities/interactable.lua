@@ -19,8 +19,7 @@ function Interactable:withinRange(character)
 end
 
 function Interactable:isLineOfSight(character)
-    return true
-    -- return tools.isLoneOfSight(character, self)
+    return tools.isLineOfSight(character, self)
 end
 
 function Interactable:activate()

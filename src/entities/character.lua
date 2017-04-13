@@ -6,6 +6,7 @@ function Character:initialize(image, x, y, args)
     self.image = image
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
+    self.heading = 0
 
     self.speed = 400
 
@@ -38,6 +39,7 @@ end
 
 function Character:update(dt)
     self.x, self.y = self.body:getPosition()
+    self.heading = self.body:getAngle()
 end
 
 return Character

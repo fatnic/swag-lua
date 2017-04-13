@@ -3,8 +3,7 @@ local MouseFollowSystem = tiny.processingSystem(class('MouseFollowSystem'))
 MouseFollowSystem.filter = tiny.requireAll('followmouse')
 
 function MouseFollowSystem:process(e, dt)
-    local x, y = love.mouse:getX(), love.mouse:getY()
-    e.target = { x = x, y = y }
+    e.target = { x = World.mouse.x, y = World.mouse.y }
 end
 
 return MouseFollowSystem

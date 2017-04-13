@@ -7,7 +7,7 @@ lume  = require 'ext.lume'
 flux  = require 'ext.flux'
 
 -- local libraries
-Wall = require 'libs.wall'
+Wall   = require 'libs.wall'
 
 -- helpers
 tools = require 'tools'
