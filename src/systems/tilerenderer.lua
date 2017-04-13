@@ -31,13 +31,13 @@ function TileRendererSystem:initialize(args)
         World.ecs:addEntity(door1)
         World.ecs:addEntity(door2)
 
-        local b1 = Sprite:new(d.x - 12, d.y - 3,  assets.images.doorbutton_unlocked)
+        local b1 = Sprite:new(d.x - 8, d.y - 2,  assets.images.doorbutton_unlocked)
         local b2 = Sprite:new(d.x + 54, d.y + 16, assets.images.doorbutton_unlocked)
         World.ecs:addEntity(b1)
         World.ecs:addEntity(b2)
 
-        local inter1 = RectangleInteractable:new(b1.x - 2, b1.y - 2, 12, 4, 'toggle_door-' .. uuid, { range = 35 })
-        local inter2 = RectangleInteractable:new(b2.x - 2, b2.y,     12, 4, 'toggle_door-' .. uuid, { range = 35 })
+        local inter1 = CircleInteractable:new(b1.center.x, b1.center.y, 10, 'toggle_door-' .. uuid, { range = 25 })
+        local inter2 = CircleInteractable:new(b2.center.x, b2.center.y, 10, 'toggle_door-' .. uuid, { range = 25 })
         World.ecs:addEntity(inter1)
         World.ecs:addEntity(inter2)
     end

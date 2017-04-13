@@ -18,6 +18,7 @@ LookAtSystem       = require 'src.systems.lookat'
 MouseFollowSystem  = require 'src.systems.mousefollow'
 InteractableSystem = require 'src.systems.interactable'
 UpdatingSystem     = require 'src.systems.updating'
+CursorSystem       = require 'src.systems.cursor'
 
 -- drawing systems
 TileRendererSystem = require 'src.systems.tilerenderer'
@@ -50,11 +51,11 @@ love.graphics.zero = function()
 end
 
 function love.load()
-    World.ecs     = tiny.world()
-    World.map     = sti('assets/maps/swag.lua')
-    World.input   = baton.new(keys)
-    World.signals = require 'ext.signal'
-    World.physics = love.physics.newWorld(0, 0, true)
+    World.ecs        = tiny.world()
+    World.map        = sti('assets/maps/swag.lua')
+    World.input      = baton.new(keys)
+    World.signals    = require 'ext.signal'
+    World.physics    = love.physics.newWorld(0, 0, true)
     World.characters = {}
 
     World.ecs:addSystem(TileRendererSystem())
@@ -65,6 +66,7 @@ function love.load()
     World.ecs:addSystem(LookAtSystem())
     World.ecs:addSystem(InteractableSystem())
     World.ecs:addSystem(UpdatingSystem())
+    World.ecs:addSystem(CursorSystem())
 
     World.characters.player = Player:new(50, 50)
     World.ecs:addEntity(World.characters.player)
@@ -74,7 +76,7 @@ end
 
 function love.update(dt)
     love.window.setTitle('swag - ' .. love.timer.getFPS() .. ' fps')
-    World.mouse = { x = love.mouse.getX() + 8, y = love.mouse.getY() + 8 }
+    World.mouse = { x = love.mouse.getX() + 8, y = love.mouse.getY() + 8, hovering = false, usable = false }
     World.input:update()
     World.physics:update(dt)
     flux.update(dt)
