@@ -2,6 +2,8 @@ local TileRendererSystem = tiny.system(class('TileRendererSystem'))
 
 function TileRendererSystem:initialize(args)
     local args = args or {}
+    self.drawingsystem = true
+
     World.walls = {}
 
     for _, layer in pairs(World.map.layers) do
@@ -42,7 +44,6 @@ function TileRendererSystem:initialize(args)
         World.ecs:addEntity(inter2)
     end
 
-    self.drawingsystem = true
 end
 
 function TileRendererSystem:update(dt)

@@ -4,7 +4,6 @@ function Character:initialize(image, x, y, args)
     local args = args or {}
 
     self.image = image
-    self.layer1 = true
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
 
@@ -18,6 +17,7 @@ function Character:initialize(image, x, y, args)
     self.x, self.y = self.body:getPosition()
 
     self.updatable = true
+    self.layer = 'fg'
 end
 
 function Character:moveLeft(dt)

@@ -59,7 +59,7 @@ function love.load()
     World.characters = {}
 
     World.ecs:addSystem(TileRendererSystem())
-    World.ecs:addSystem(SpriteSystem())
+    World.ecs:addSystem(SpriteSystem('fg'))
 
     World.ecs:addSystem(ControllableSystem())
     World.ecs:addSystem(MouseFollowSystem())
@@ -70,20 +70,18 @@ function love.load()
 
     World.characters.player = Player:new(50, 50)
     World.ecs:addEntity(World.characters.player)
-
-    love.mouse.setCursor(assets.cursors.crosshair)
 end
 
 function love.update(dt)
     love.window.setTitle('swag - ' .. love.timer.getFPS() .. ' fps')
     World.mouse = { x = love.mouse.getX() + 8, y = love.mouse.getY() + 8, hovering = false, usable = false }
+
     World.input:update()
     World.physics:update(dt)
     flux.update(dt)
+    World.ecs:update(dt, updateSystems)
 
     if World.input:pressed 'debug' then World.debug = not World.debug end
-
-    World.ecs:update(dt, updateSystems)
 end
 
 function love.draw()

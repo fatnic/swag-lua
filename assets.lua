@@ -3,7 +3,7 @@ local assets = {}
 assets.images = {}
 assets.cursors = {}
 
-assets.images.player = love.graphics.newImage('assets/images/player.png')
+assets.images.player = love.graphics.newImage('assets/images/enemy.png')
 assets.images.door   = love.graphics.newImage('assets/images/door.png')
 assets.images.doorbutton_unlocked = love.graphics.newImage('assets/images/doorbutton_unlocked.png')
 

@@ -4,6 +4,14 @@ SpriteSystem.drawingsystem = true
 
 SpriteSystem.filter = tiny.requireAll('image', tiny.requireAny('x', 'y', 'body'))
 
+function SpriteSystem:initialize(layer)
+    self.layer = layer
+end
+
+function SpriteSystem:filter(e)
+    return e.layer == self.layer
+end
+
 function SpriteSystem:process(e, dt)
     love.graphics.zero()
 
