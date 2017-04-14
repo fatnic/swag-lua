@@ -7,18 +7,17 @@ function Character:initialize(image, x, y, args)
     self.width = self.image:getWidth()
     self.height = self.image:getHeight()
     self.heading = 0
+    self.layer = 'characters'
 
-    self.speed = 400
+    self.speed = 250
 
     self.body    = love.physics.newBody(World.physics, x + self.width / 2, y + self.height / 2, 'dynamic')
-    self.shape   = love.physics.newRectangleShape(self.width, self.height)
+    -- self.shape   = love.physics.newRectangleShape(self.width, self.height)
+    self.shape   = love.physics.newCircleShape(12)
     self.fixture = love.physics.newFixture(self.body, self.shape, 1)
     self.body:setLinearDamping(6)
 
-    self.x, self.y = self.body:getPosition()
-
     self.updatable = true
-    self.layer = 'characters'
 end
 
 function Character:moveLeft(dt)

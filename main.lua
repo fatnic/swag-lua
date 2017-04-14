@@ -1,16 +1,21 @@
 -- external libraries
-class = require 'ext.middleclass'
-tiny  = require 'ext.tiny'
-sti   = require 'ext.sti'
-baton = require 'ext.baton'
-lume  = require 'ext.lume'
-flux  = require 'ext.flux'
+class    = require 'ext.middleclass'
+tiny     = require 'ext.tiny'
+sti      = require 'ext.sti'
+baton    = require 'ext.baton'
+lume     = require 'ext.lume'
+flux     = require 'ext.flux'
+parseimg = require 'ext.parseimg'
 
 -- local libraries
 Wall   = require 'libs.wall'
 
 -- helpers
 tools = require 'tools'
+
+-- parser systems
+WallParserSystem = require 'src.systems.wallparser'
+DoorParserSystem = require 'src.systems.doorparser'
 
 -- update systems
 ControllableSystem = require 'src.systems.controllable'
@@ -19,12 +24,13 @@ MouseFollowSystem  = require 'src.systems.mousefollow'
 InteractableSystem = require 'src.systems.interactable'
 UpdatingSystem     = require 'src.systems.updating'
 CursorSystem       = require 'src.systems.cursor'
+MouseSystem        = require 'src.systems.mouse'
 
 -- drawing systems
-TileRendererSystem = require 'src.systems.tilerenderer'
+TileRendererSystem = require 'src.systems.tilerender'
 SpriteSystem       = require 'src.systems.sprite'
 VisionSystem       = require 'src.systems.vision'
-WallSystem         = require 'src.systems.wall'
+DebugSystem        = require 'src.systems.debug'
 
 -- system filters
 drawingSystems = tiny.requireAll('drawingsystem')
@@ -46,6 +52,7 @@ keys   = require 'keys'
 World = {}
 World.debug = false
 
+-- TODO: Move this
 love.graphics.zero = function()
     love.graphics.setColor(255, 255, 255)
     love.graphics.setStencilTest()
@@ -62,18 +69,24 @@ function love.load()
     World.physics    = love.physics.newWorld(0, 0, true)
     World.characters = {}
 
-    World.ecs:addSystem(TileRendererSystem())
-    World.ecs:addSystem(VisionSystem())
-    World.ecs:addSystem(SpriteSystem('characters'))
-    World.ecs:addSystem(SpriteSystem('fg'))
-    World.ecs:addSystem(WallSystem())
+    World.ecs:addSystem(WallParserSystem())
+    World.ecs:addSystem(DoorParserSystem())
+    -- World.ecs:addSystem(CharacterParserSystem())
 
+    World.ecs:addSystem(MouseSystem())
     World.ecs:addSystem(ControllableSystem())
     World.ecs:addSystem(MouseFollowSystem())
     World.ecs:addSystem(LookAtSystem())
     World.ecs:addSystem(InteractableSystem())
     World.ecs:addSystem(UpdatingSystem())
     World.ecs:addSystem(CursorSystem())
+
+    World.ecs:addSystem(TileRendererSystem('floor'))
+    World.ecs:addSystem(VisionSystem())
+    World.ecs:addSystem(SpriteSystem('characters'))
+    World.ecs:addSystem(SpriteSystem('fg'))
+    World.ecs:addSystem(TileRendererSystem('walls'))
+    World.ecs:addSystem(DebugSystem())
 
     World.characters.player = Player:new(50, 50)
     World.ecs:addEntity(World.characters.player)
@@ -83,7 +96,6 @@ end
 
 function love.update(dt)
     love.window.setTitle('swag - ' .. love.timer.getFPS() .. ' fps')
-    World.mouse = { x = love.mouse.getX() + 8, y = love.mouse.getY() + 8, hovering = false, usable = false }
 
     World.input:update()
     World.physics:update(dt)
@@ -91,7 +103,7 @@ function love.update(dt)
 
     World.ecs:update(dt, updateSystems)
 
-    if World.input:pressed 'debug' then World.debug = not World.debug end
+    if World.input:pressed 'debug' then DebugSystem.active = not DebugSystem.active end
 end
 
 function love.draw()

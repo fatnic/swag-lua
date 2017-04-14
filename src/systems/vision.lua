@@ -32,7 +32,7 @@ function VisionSystem:onAdd(e)
 end
 
 function VisionSystem:preWrap(dt)
-    -- love.graphics.zero()
+    love.graphics.zero()
     -- love.graphics.setCanvas(self.canvas)
     -- love.graphics.clear()
     -- love.graphics.setColor(255, 255, 255, 50)
@@ -64,7 +64,7 @@ function VisionSystem:process(e, dt)
 
     local mesh = love.graphics.newMesh(meshdata, 'fan')
     
-    love.graphics.setColor(255, 255,255, 20)
+    love.graphics.setColor(255, 255, 255, 20)
     love.graphics.draw(mesh)
 end
 
