@@ -18,7 +18,7 @@ function Character:initialize(image, x, y, args)
     self.x, self.y = self.body:getPosition()
 
     self.updatable = true
-    self.layer = 'fg'
+    self.layer = 'characters'
 end
 
 function Character:moveLeft(dt)

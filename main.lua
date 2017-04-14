@@ -23,6 +23,8 @@ CursorSystem       = require 'src.systems.cursor'
 -- drawing systems
 TileRendererSystem = require 'src.systems.tilerenderer'
 SpriteSystem       = require 'src.systems.sprite'
+VisionSystem       = require 'src.systems.vision'
+WallSystem         = require 'src.systems.wall'
 
 -- system filters
 drawingSystems = tiny.requireAll('drawingsystem')
@@ -47,10 +49,12 @@ World.debug = false
 love.graphics.zero = function()
     love.graphics.setColor(255, 255, 255)
     love.graphics.setStencilTest()
+    love.graphics.setBlendMode('alpha')
     love.graphics.setShader()
 end
 
 function love.load()
+    World.screen     = { width = love.graphics:getWidth(), height = love.graphics:getHeight() }
     World.ecs        = tiny.world()
     World.map        = sti('assets/maps/swag.lua')
     World.input      = baton.new(keys)
@@ -59,7 +63,10 @@ function love.load()
     World.characters = {}
 
     World.ecs:addSystem(TileRendererSystem())
+    World.ecs:addSystem(VisionSystem())
+    World.ecs:addSystem(SpriteSystem('characters'))
     World.ecs:addSystem(SpriteSystem('fg'))
+    World.ecs:addSystem(WallSystem())
 
     World.ecs:addSystem(ControllableSystem())
     World.ecs:addSystem(MouseFollowSystem())
@@ -70,6 +77,8 @@ function love.load()
 
     World.characters.player = Player:new(50, 50)
     World.ecs:addEntity(World.characters.player)
+
+    love.mouse.setPosition(World.screen.width / 2, World.screen.height / 2)
 end
 
 function love.update(dt)
@@ -79,6 +88,7 @@ function love.update(dt)
     World.input:update()
     World.physics:update(dt)
     flux.update(dt)
+
     World.ecs:update(dt, updateSystems)
 
     if World.input:pressed 'debug' then World.debug = not World.debug end
@@ -87,5 +97,4 @@ end
 function love.draw()
     local dt = love.timer.getDelta()
     World.ecs:update(dt, drawingSystems)
-    World.map:drawTileLayer('walls')
 end

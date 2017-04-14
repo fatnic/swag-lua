@@ -38,7 +38,6 @@ function Door:toggle()
         self.activated = false
         self.open = not self.open
     end)
-
 end
 
 function Door:inFrame(character)

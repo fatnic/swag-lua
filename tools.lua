@@ -4,12 +4,31 @@ function tools.ternary(cond, t, f)
     if cond then return t else return f end
 end
 
+-- angles
+
+function tools.normaliseRadian(rad)
+    local result = rad % (2 * math.pi)
+    if result < 0 then result = result + (2 * math.pi) end
+    return result
+end
+
+function tools.isAngleBetween(angle, min, max)
+    local rad = math.pi * 2
+    local angle = (rad + (angle % rad)) % rad
+    local min = (rad + min) % rad
+    local max = (rad + max) % rad
+    if (min < max) then return min <= angle and angle <= max end
+    return min <= angle or angle <= max
+end
+
+-- vector math
 function tools.distance(v1, v2)
     local dx = v1.x - v2.x
     local dy = v1.y - v2.y
     return math.sqrt(dx * dx + dy * dy)
 end
 
+-- line intersection functions
 function tools.isLineOfSight(p1, p2)
     local ray = { a = { x = p1.x, y = p1.y }, b = { x = p2.x, y = p2.y } }
     for _, wall in pairs(World.walls) do
@@ -40,10 +59,26 @@ function tools.segmentIntersect(ray, segment)
     if (ua >= 0 and ua <= 1 and ub >= 0 and ub <= 1) then
         local x = L1.X1 + (ua * (L1.X2 - L1.X1))
         local y = L1.Y1 + (ua * (L1.Y2 - L1.Y1))
-        return true, { x = x, y = y }
+        return { x = x, y = y }
     end
 
     return false
+end
+
+function tools.rotateTable(t, n)
+    local len, out = #t, {}
+    for i=1, len do
+        out[i] = t[(i - 1 + n) % len]
+    end
+    return out
+end
+
+function tools.getIndexforValue(tbl, key, val)
+    for i, v in ipairs(tbl) do
+        if v[key] == val then 
+            return i 
+        end
+    end
 end
 
 return tools
