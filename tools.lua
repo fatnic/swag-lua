@@ -4,8 +4,6 @@ function tools.ternary(cond, t, f)
     if cond then return t else return f end
 end
 
--- angles
-
 function tools.normaliseRadian(rad)
     local result = rad % (2 * math.pi)
     if result < 0 then result = result + (2 * math.pi) end
@@ -21,14 +19,12 @@ function tools.isAngleBetween(angle, min, max)
     return min <= angle or angle <= max
 end
 
--- vector math
 function tools.distance(v1, v2)
     local dx = v1.x - v2.x
     local dy = v1.y - v2.y
     return math.sqrt(dx * dx + dy * dy)
 end
 
--- line intersection functions
 function tools.isLineOfSight(p1, p2)
     local ray = { a = { x = p1.x, y = p1.y }, b = { x = p2.x, y = p2.y } }
     for _, wall in pairs(World.walls) do

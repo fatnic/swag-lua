@@ -23,13 +23,16 @@ function SpriteSystem:process(e, dt)
     end
 
     if World.debug then
+
         love.graphics.setColor(255, 0, 0, 100)
         if e.body then
             love.graphics.polygon('fill', e.body:getWorldPoints(e.shape:getPoints()))
         else
             love.graphics.rectangle('fill', e.x, e.y, e.width, e.height)
         end
+
     end
+
 end
 
 return SpriteSystem

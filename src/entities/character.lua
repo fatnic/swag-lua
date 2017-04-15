@@ -9,7 +9,7 @@ function Character:initialize(image, x, y, args)
     self.heading = 0
     self.layer = 'characters'
 
-    self.speed = 250
+    self.speed = 275
 
     self.body    = love.physics.newBody(World.physics, x + self.width / 2, y + self.height / 2, 'dynamic')
     -- self.shape   = love.physics.newRectangleShape(self.width, self.height)
@@ -39,6 +39,12 @@ end
 function Character:update(dt)
     self.x, self.y = self.body:getPosition()
     self.heading = self.body:getAngle()
+end
+
+function Character:debug()
+    love.graphics.setColor(0, 255, 0)
+    local delta = { x = math.cos(self.heading), y = math.sin(self.heading) }
+    love.graphics.line(self.x, self.y, self.x + delta.x * 30, self.y + delta.y * 30) 
 end
 
 return Character

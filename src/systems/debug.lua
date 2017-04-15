@@ -3,14 +3,6 @@ local DebugSystem = tiny.system(class('DebugSystem'))
 DebugSystem.drawingsystem = true
 DebugSystem.active = false
 
-function DebugSystem:initialize()
-    -- self.canvas = love.graphics.newCanvas(World.screen.width, World.width.height)
-end
-
-function DebugSystem:preWrap(dt)
-
-end
-
 function DebugSystem:update(dt)
     love.graphics.zero()
     
@@ -31,10 +23,6 @@ function DebugSystem:update(dt)
         end
 
     end
-end
-
-function DebugSystem:postWrap(dt)
-
 end
 
 return DebugSystem

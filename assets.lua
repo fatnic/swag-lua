@@ -4,7 +4,8 @@ assets.images = {}
 assets.cursors = {}
 
 assets.images.player              = love.graphics.newImage('assets/images/player.png')
-assets.images.door                = love.graphics.newImage('assets/images/door.png')
+assets.images.door_horizontal     = love.graphics.newImage('assets/images/door_horizontal.png')
+assets.images.door_vertical       = love.graphics.newImage('assets/images/door_vertical.png')
 assets.images.doorbutton_unlocked = love.graphics.newImage('assets/images/doorbutton_unlocked.png')
 
 assets.cursors.crosshair      = love.mouse.newCursor('assets/images/crosshair16.png')

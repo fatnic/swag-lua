@@ -5,7 +5,7 @@ sti      = require 'ext.sti'
 baton    = require 'ext.baton'
 lume     = require 'ext.lume'
 flux     = require 'ext.flux'
-parseimg = require 'ext.parseimg'
+ParseImg = require 'ext.parseimg'
 
 -- local libraries
 Wall   = require 'libs.wall'
@@ -14,8 +14,9 @@ Wall   = require 'libs.wall'
 tools = require 'tools'
 
 -- parser systems
-WallParserSystem = require 'src.systems.wallparser'
-DoorParserSystem = require 'src.systems.doorparser'
+WallParserSystem   = require 'src.systems.wallparser'
+DoorParserSystem   = require 'src.systems.doorparser'
+WindowParserSystem = require 'src.systems.windowparser'
 
 -- update systems
 ControllableSystem = require 'src.systems.controllable'
@@ -71,6 +72,7 @@ function love.load()
 
     World.ecs:addSystem(WallParserSystem())
     World.ecs:addSystem(DoorParserSystem())
+    World.ecs:addSystem(WindowParserSystem())
     -- World.ecs:addSystem(CharacterParserSystem())
 
     World.ecs:addSystem(MouseSystem())
@@ -82,9 +84,10 @@ function love.load()
     World.ecs:addSystem(CursorSystem())
 
     World.ecs:addSystem(TileRendererSystem('floor'))
-    World.ecs:addSystem(VisionSystem())
+    -- World.ecs:addSystem(VisionSystem())
     World.ecs:addSystem(SpriteSystem('characters'))
     World.ecs:addSystem(SpriteSystem('fg'))
+    World.ecs:addSystem(TileRendererSystem('windows'))
     World.ecs:addSystem(TileRendererSystem('walls'))
     World.ecs:addSystem(DebugSystem())
 
@@ -104,6 +107,7 @@ function love.update(dt)
     World.ecs:update(dt, updateSystems)
 
     if World.input:pressed 'debug' then DebugSystem.active = not DebugSystem.active end
+    -- if World.input:pressed 'doors' then World.doors[1]:toggle() end
 end
 
 function love.draw()

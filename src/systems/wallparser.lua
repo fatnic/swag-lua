@@ -8,7 +8,7 @@ function WallParserSystem:initialize()
     World.map:drawTileLayer('walls')
     love.graphics.setCanvas()
 
-    local rects = parseimg.rects(canvas:newImageData())
+    local rects = ParseImg.rects(canvas:newImageData())
 
     for _, r in pairs(rects) do
         local wall = Wall.new(r.x, r.y, r.w, r.h)
@@ -17,7 +17,8 @@ function WallParserSystem:initialize()
         wall.fixture = love.physics.newFixture(wall.body, wall.shape)
         table.insert(World.walls, wall)
     end
-    
+
+    canvas = nil    
 end
 
 return WallParserSystem

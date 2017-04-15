@@ -1,48 +1,48 @@
 local Door = class('Door')
 
-function Door:initialize(x, y, uuid, direction) 
-    self.image = assets.images.door
-    self.width = 24
-    self.height = 16
-    self.uuid = uuid
-    self.direction = direction
-    self.frame = { x = x, y = y, width = 48, height = 16 }
+function Door:initialize(x, y, orientation, args) 
+    local args = args or {}
+    self.orientation = orientation or 'horizontal'
+    self.uuid = lume.uuid()
+    self.speed = args.speed or 0.5
 
-    self.activated = false
-    self.open = false
-    self.layer = 'fg'
+    self.width  = tools.ternary(self.orientation == 'horizontal', 32, 16)
+    self.height = tools.ternary(self.orientation == 'horizontal', 16, 32)
+    self.movementaxis  = tools.ternary(self.orientation == 'horizontal', 'x', 'y')
 
     self.body    = love.physics.newBody(World.physics, x + self.width / 2, y + self.height / 2)
     self.shape   = love.physics.newRectangleShape(self.width, self.height)
     self.fixture = love.physics.newFixture(self.body, self.shape)
 
+    self.open = false
+
+    local img = tools.ternary(self.orientation == 'horizontal', 'door_horizontal', 'door_vertical')
+    self.image = assets.images[img]
+
+    self.activated = false
+    self.open = false
+    self.layer = 'fg'
+
     World.signals.register('toggle_door-' .. self.uuid, function() self:toggle() end)
 end
 
 function Door:toggle()
-    if self.activated then 
-        if self:inFrame(World.characters.player) then print('squished') end
-        return false
-    end
+    if self.activated then return false end
+    
+    local position = { x = self.body:getX(), y = self.body:getY() }
+    local movement = tools.ternary(self.open, 32, -32)
 
-    local x, y = self.body:getX(), self.body:getY()
-    local offset = tools.ternary(self.open, self.width, -self.width)
-    offset = tools.ternary(self.direction % 2 == 0, -offset, offset)
-
-    local doorpos = { x = x, y = y }
-    flux.to(doorpos, 0.3, { x = x + offset }):onstart(function() 
+    local newposition = { x = position.x, y = position.y }
+    newposition[self.movementaxis] = newposition[self.movementaxis] + movement 
+    
+    flux.to(position, self.speed, { x = newposition.x, y = newposition.y }):onstart(function() 
         self.activated = true
     end):onupdate(function() 
-        self.body:setPosition(doorpos.x, doorpos.y)
+        self.body:setPosition(position.x, position.y)
     end):oncomplete(function()
         self.activated = false
         self.open = not self.open
     end)
-end
-
-function Door:inFrame(character)
-    return      (character.x >= self.frame.x and character.x <= self.frame.x + self.frame.width) 
-            and (character.y >= self.frame.y and character.y <= self.frame.y + self.frame.height)
 end
 
 return Door

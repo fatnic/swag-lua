@@ -13,7 +13,6 @@ function VisionSystem:initialize()
     for _, wall in pairs(World.walls) do
         for _, segment in pairs(wall.segments) do
             table.insert(self.segments, segment)
-            -- TODO: check this: maybe remove dupe angles instead???
             local dupe = false
             for _, p in pairs(self.points) do
                 if p.x == segment.a.x and p.y == segment.a.y then dupe = true end
@@ -21,8 +20,6 @@ function VisionSystem:initialize()
             if not dupe then table.insert(self.points, segment.a) end
         end
     end
-
-    -- TODO: Add doors to segments list
 
     self.raylength = tools.distance({x = 0, y = 0}, {x = World.screen.width, y = World.screen.height})
 end
