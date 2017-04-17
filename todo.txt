@@ -1,7 +1,0 @@
-things to add
--------------
-    - doors (half sliding eaither way)
-    - patrolling enemy robots (with vision)
-    - comupters (hack remote doors)
-    - windows (seen through but not walk through)
-    - throwables (grenades/tazers/rocks) - diversion

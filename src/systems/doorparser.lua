@@ -17,7 +17,7 @@ function DoorParserSystem:initialize()
             offset2 = { x = 35, y = 16, r = 0} 
         else
             offset1 = { x = 17, y = -6, r = math.pi / 2} 
-            offset2 = { x = 0, y = 35, r = math.pi / 2} 
+            offset2 = { x = 0,  y = 35, r = math.pi / 2} 
         end
 
         local bt1 = Sprite:new(d.x + offset1.x, d.y + offset1.y, assets.images.doorbutton_unlocked, 'fg', { rotation = offset1.r })
@@ -27,10 +27,9 @@ function DoorParserSystem:initialize()
 
         local button1 = CircleInteractable:new(bt1.center.x, bt1.center.y, 10, 'toggle_door-' .. door.uuid, { range = 25 })
         World.ecs:addEntity(button1)
-        local button2 = CircleInteractable:new(bt2.center.x, bt2.center.y, 10, 'toggle_door-' .. door.uuid, { range = 25 })
+        local button2 = CircleInteractable:new(bt2.center.x - 4, bt2.center.y + 3, 10, 'toggle_door-' .. door.uuid, { range = 25 })
         World.ecs:addEntity(button2)
 
-        -- 2 x interactibles
     end
 end
 

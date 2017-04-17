@@ -5,7 +5,7 @@ DebugSystem.active = false
 
 function DebugSystem:update(dt)
     love.graphics.zero()
-    
+
     local bodies = World.physics:getBodyList()
 
     love.graphics.setColor(255, 0, 0, 100)
@@ -14,7 +14,7 @@ function DebugSystem:update(dt)
         local shape = body:getFixtureList()[1]:getShape()
 
         if shape:getType() == 'polygon' then
-            love.graphics.polygon('fill', body:getWorldPoints(shape:getPoints()))
+            love.graphics.polygon('line', body:getWorldPoints(shape:getPoints()))
         end
 
         if shape:getType() == 'circle' then

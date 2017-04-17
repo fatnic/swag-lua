@@ -9,14 +9,15 @@ ParseImg = require 'ext.parseimg'
 
 -- local libraries
 Wall   = require 'libs.wall'
+PixelMerge = require 'libs.pixelmerge'
 
 -- helpers
 tools = require 'tools'
 
 -- parser systems
 WallParserSystem   = require 'src.systems.wallparser'
-DoorParserSystem   = require 'src.systems.doorparser'
 WindowParserSystem = require 'src.systems.windowparser'
+DoorParserSystem   = require 'src.systems.doorparser'
 
 -- update systems
 ControllableSystem = require 'src.systems.controllable'
@@ -71,8 +72,8 @@ function love.load()
     World.characters = {}
 
     World.ecs:addSystem(WallParserSystem())
-    World.ecs:addSystem(DoorParserSystem())
     World.ecs:addSystem(WindowParserSystem())
+    World.ecs:addSystem(DoorParserSystem())
     -- World.ecs:addSystem(CharacterParserSystem())
 
     World.ecs:addSystem(MouseSystem())
@@ -107,7 +108,11 @@ function love.update(dt)
     World.ecs:update(dt, updateSystems)
 
     if World.input:pressed 'debug' then DebugSystem.active = not DebugSystem.active end
-    -- if World.input:pressed 'doors' then World.doors[1]:toggle() end
+    if World.input:pressed 'doors' then 
+        for _, d in pairs(World.doors) do 
+            if not d.open then d:toggle() end
+        end 
+    end
 end
 
 function love.draw()

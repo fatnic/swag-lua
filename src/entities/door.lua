@@ -6,11 +6,12 @@ function Door:initialize(x, y, orientation, args)
     self.uuid = lume.uuid()
     self.speed = args.speed or 0.5
 
-    self.width  = tools.ternary(self.orientation == 'horizontal', 32, 16)
-    self.height = tools.ternary(self.orientation == 'horizontal', 16, 32)
+    self.width  = tools.ternary(self.orientation == 'horizontal', 32, 10)
+    self.height = tools.ternary(self.orientation == 'horizontal', 10, 32)
+    self.offset = tools.ternary(self.orientation == 'horizontal', { x = 0, y = 3 }, { x = 3, y = 0 })
     self.movementaxis  = tools.ternary(self.orientation == 'horizontal', 'x', 'y')
 
-    self.body    = love.physics.newBody(World.physics, x + self.width / 2, y + self.height / 2)
+    self.body    = love.physics.newBody(World.physics, x + self.offset.x + self.width / 2, y + self.offset.y + self.height / 2)
     self.shape   = love.physics.newRectangleShape(self.width, self.height)
     self.fixture = love.physics.newFixture(self.body, self.shape)
 
