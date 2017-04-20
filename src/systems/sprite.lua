@@ -13,7 +13,7 @@ function SpriteSystem:filter(e)
 end
 
 function SpriteSystem:process(e, dt)
-    love.graphics.zero()
+    tools.graphics.clear()
 
     if e.body then
         love.graphics.draw(e.image, e.body:getX(), e.body:getY(), e.body:getAngle(), 1, 1, e.width / 2, e.height / 2)

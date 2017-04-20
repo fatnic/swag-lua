@@ -1,4 +1,12 @@
 local tools = {}
+tools.graphics = {}
+
+tools.graphics.clear = function()
+    love.graphics.setColor(255, 255, 255)
+    love.graphics.setStencilTest()
+    love.graphics.setBlendMode('alpha')
+    love.graphics.setShader()
+end
 
 function tools.ternary(cond, t, f)
     if cond then return t else return f end

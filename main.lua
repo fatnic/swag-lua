@@ -5,7 +5,9 @@ sti      = require 'ext.sti'
 baton    = require 'ext.baton'
 lume     = require 'ext.lume'
 flux     = require 'ext.flux'
+log      = require 'ext.log'
 ParseImg = require 'ext.parseimg'
+LightWorld = require 'ext.lightworld'
 
 -- local libraries
 Wall   = require 'libs.wall'
@@ -18,6 +20,7 @@ tools = require 'tools'
 WallParserSystem   = require 'src.systems.wallparser'
 WindowParserSystem = require 'src.systems.windowparser'
 DoorParserSystem   = require 'src.systems.doorparser'
+LightingSystem     = require 'src.systems.lighting'
 
 -- update systems
 ControllableSystem = require 'src.systems.controllable'
@@ -54,14 +57,6 @@ keys   = require 'keys'
 World = {}
 World.debug = false
 
--- TODO: Move this
-love.graphics.zero = function()
-    love.graphics.setColor(255, 255, 255)
-    love.graphics.setStencilTest()
-    love.graphics.setBlendMode('alpha')
-    love.graphics.setShader()
-end
-
 function love.load()
     World.screen     = { width = love.graphics:getWidth(), height = love.graphics:getHeight() }
     World.ecs        = tiny.world()
@@ -74,7 +69,6 @@ function love.load()
     World.ecs:addSystem(WallParserSystem())
     World.ecs:addSystem(WindowParserSystem())
     World.ecs:addSystem(DoorParserSystem())
-    -- World.ecs:addSystem(CharacterParserSystem())
 
     World.ecs:addSystem(MouseSystem())
     World.ecs:addSystem(ControllableSystem())
@@ -83,9 +77,10 @@ function love.load()
     World.ecs:addSystem(InteractableSystem())
     World.ecs:addSystem(UpdatingSystem())
     World.ecs:addSystem(CursorSystem())
+    World.ecs:addSystem(VisionSystem())
+    World.ecs:addSystem(LightingSystem())
 
     World.ecs:addSystem(TileRendererSystem('floor'))
-    -- World.ecs:addSystem(VisionSystem())
     World.ecs:addSystem(SpriteSystem('characters'))
     World.ecs:addSystem(SpriteSystem('fg'))
     World.ecs:addSystem(TileRendererSystem('windows'))
@@ -109,13 +104,13 @@ function love.update(dt)
 
     if World.input:pressed 'debug' then DebugSystem.active = not DebugSystem.active end
     if World.input:pressed 'doors' then 
-        for _, d in pairs(World.doors) do 
-            if not d.open then d:toggle() end
-        end 
+        for _, d in pairs(World.doors) do d:toggle() end 
     end
 end
 
 function love.draw()
     local dt = love.timer.getDelta()
-    World.ecs:update(dt, drawingSystems)
+    World.lights:draw(function() 
+        World.ecs:update(dt, drawingSystems)
+    end)
 end

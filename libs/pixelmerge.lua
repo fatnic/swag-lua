@@ -35,7 +35,7 @@ function PixelMerge.parse(idata)
                     end
                 end
 
-                table.sort( overlaps, function (a, b) return a.start_y < b.start_y end)
+                table.sort(overlaps, function (a, b) return a.start_y < b.start_y end)
 
                 for _, r in ipairs(overlaps) do
                     if start_y < r.start_y then

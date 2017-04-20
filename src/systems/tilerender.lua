@@ -6,7 +6,7 @@ function TileRenderSystem:initialize(layer)
 end
 
 function TileRenderSystem:update(dt)
-    love.graphics.zero()
+    tools.graphics.clear()
     World.map:drawTileLayer(self.layer)
 end
 

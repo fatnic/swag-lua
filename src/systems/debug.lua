@@ -4,7 +4,7 @@ DebugSystem.drawingsystem = true
 DebugSystem.active = false
 
 function DebugSystem:update(dt)
-    love.graphics.zero()
+    tools.graphics.clear()
 
     local bodies = World.physics:getBodyList()
 
@@ -13,6 +13,7 @@ function DebugSystem:update(dt)
 
         local shape = body:getFixtureList()[1]:getShape()
 
+        love.graphics.setLineWidth(2)
         if shape:getType() == 'polygon' then
             love.graphics.polygon('line', body:getWorldPoints(shape:getPoints()))
         end
