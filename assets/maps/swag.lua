@@ -8,7 +8,7 @@ return {
   height = 38,
   tilewidth = 16,
   tileheight = 16,
-  nextobjectid = 97,
+  nextobjectid = 102,
   properties = {},
   tilesets = {
     {
@@ -345,6 +345,61 @@ return {
           height = 32,
           rotation = 0,
           visible = true,
+          properties = {}
+        }
+      }
+    },
+    {
+      type = "objectgroup",
+      name = "characters",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      draworder = "topdown",
+      properties = {},
+      objects = {
+        {
+          id = 97,
+          name = "player",
+          type = "",
+          shape = "ellipse",
+          x = 672,
+          y = 80,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 99,
+          name = "enemy1",
+          type = "",
+          shape = "ellipse",
+          x = 64,
+          y = 192,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 101,
+          name = "enemy1_path",
+          type = "",
+          shape = "polyline",
+          x = 64,
+          y = 192,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          polyline = {
+            { x = 0, y = 0 },
+            { x = 688, y = 0 }
+          },
           properties = {}
         }
       }

@@ -30,11 +30,12 @@ InteractableSystem = require 'src.systems.interactable'
 UpdatingSystem     = require 'src.systems.updating'
 CursorSystem       = require 'src.systems.cursor'
 MouseSystem        = require 'src.systems.mouse'
+VisionSystem       = require 'src.systems.vision'
 
 -- drawing systems
 TileRendererSystem = require 'src.systems.tilerender'
 SpriteSystem       = require 'src.systems.sprite'
-VisionSystem       = require 'src.systems.vision'
+VisionRenderSystem = require 'src.systems.visionrender'
 DebugSystem        = require 'src.systems.debug'
 
 -- system filters
@@ -44,6 +45,7 @@ updateSystems  = tiny.rejectAll('drawingsystem')
 -- entities
 Character             = require 'src.entities.character'
 Player                = require 'src.entities.player'
+Enemy                 = require 'src.entities.enemy'
 Sprite                = require 'src.entities.sprite'
 Door                  = require 'src.entities.door'
 Interactable          = require 'src.entities.interactable'
@@ -57,7 +59,7 @@ keys   = require 'keys'
 World = {}
 World.debug = false
 
-function love.load()
+function love.load(arg)
     World.screen     = { width = love.graphics:getWidth(), height = love.graphics:getHeight() }
     World.ecs        = tiny.world()
     World.map        = sti('assets/maps/swag.lua')
@@ -75,20 +77,26 @@ function love.load()
     World.ecs:addSystem(MouseFollowSystem())
     World.ecs:addSystem(LookAtSystem())
     World.ecs:addSystem(InteractableSystem())
-    World.ecs:addSystem(UpdatingSystem())
     World.ecs:addSystem(CursorSystem())
-    World.ecs:addSystem(VisionSystem())
     World.ecs:addSystem(LightingSystem())
+    World.ecs:addSystem(VisionSystem())
+    World.ecs:addSystem(UpdatingSystem())
 
     World.ecs:addSystem(TileRendererSystem('floor'))
     World.ecs:addSystem(SpriteSystem('characters'))
     World.ecs:addSystem(SpriteSystem('fg'))
+    World.ecs:addSystem(VisionRenderSystem())
     World.ecs:addSystem(TileRendererSystem('windows'))
     World.ecs:addSystem(TileRendererSystem('walls'))
     World.ecs:addSystem(DebugSystem())
 
-    World.characters.player = Player:new(50, 50)
+    World.characters.player = Player:new(64, 64)
     World.ecs:addEntity(World.characters.player)
+
+    for _, enemy in pairs(require 'enemies') do
+        local e = Enemy:new(enemy.x, enemy.y)
+        World.ecs:addEntity(e)
+    end
 
     love.mouse.setPosition(World.screen.width / 2, World.screen.height / 2)
 end
@@ -103,14 +111,14 @@ function love.update(dt)
     World.ecs:update(dt, updateSystems)
 
     if World.input:pressed 'debug' then DebugSystem.active = not DebugSystem.active end
-    if World.input:pressed 'doors' then 
-        for _, d in pairs(World.doors) do d:toggle() end 
+    if World.input:pressed 'doors' then
+        for _, d in pairs(World.doors) do d:toggle() end
     end
 end
 
 function love.draw()
     local dt = love.timer.getDelta()
-    World.lights:draw(function() 
+    World.lights:draw(function()
         World.ecs:update(dt, drawingSystems)
     end)
 end

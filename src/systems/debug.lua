@@ -8,8 +8,8 @@ function DebugSystem:update(dt)
 
     local bodies = World.physics:getBodyList()
 
-    love.graphics.setColor(255, 0, 0, 100)
     for _, body in pairs(bodies) do
+        love.graphics.setColor(255, 0, 0, 100)
 
         local shape = body:getFixtureList()[1]:getShape()
 
@@ -21,7 +21,17 @@ function DebugSystem:update(dt)
         if shape:getType() == 'circle' then
             local x, y = body:getPosition()
             love.graphics.circle('fill', x, y, shape:getRadius())
+
+            love.graphics.setColor(0, 0, 255)
+            local dx = math.cos(body:getAngle())
+            local dy = math.sin(body:getAngle())
+            local x, y = body:getPosition()
+            love.graphics.line(x, y, x + dx * 30, y + dy * 30)
         end
+        
+        love.graphics.setColor(255, 255, 255)
+        local x, y = World.mouse.x, World.mouse.y
+        love.graphics.print('[' .. x .. ', ' .. y .. ']', x + 8, y - 26)
 
     end
 end

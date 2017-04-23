@@ -31,6 +31,11 @@ function SpriteSystem:process(e, dt)
             love.graphics.rectangle('fill', e.x, e.y, e.width, e.height)
         end
 
+        love.graphics.setColor(0, 0, 255)
+        local dx = math.cos(e.heading)
+        local dy = math.sin(e.heading)
+        love.graphics.line(e.x, e.y, e.x + dx * 100, e.y + dy * 100)
+
     end
 
 end

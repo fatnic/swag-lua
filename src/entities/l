@@ -11,15 +11,15 @@ function Character:initialize(image, x, y, args)
     self.layer = 'characters'
 
     self.speed = 275
-    
+
     self.body    = love.physics.newBody(World.physics, x + self.width / 2, y + self.height / 2, 'dynamic')
     self.shape   = love.physics.newCircleShape(12)
     self.fixture = love.physics.newFixture(self.body, self.shape, 1)
     self.body:setLinearDamping(6)
 
-    self.x, self.y = self.body:getPosition()
-
     self.updatable = true
+
+    self.update(self)
 end
 
 function Character:moveLeft(dt)

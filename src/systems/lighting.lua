@@ -1,7 +1,7 @@
 local LightingSystem = tiny.system(class('LightingSystem'))
 
 function LightingSystem:initialize()
-    World.lights = LightWorld({ambient = {55,55,55}})
+    World.lights = LightWorld({ambient = {140, 140, 140}})
     World.lights:setShadowBlur(1)
     
     for _, wall in pairs(World.walls) do
