@@ -6,8 +6,8 @@ DebugSystem.active = false
 function DebugSystem:update(dt)
     tools.graphics.clear()
 
+    -- draw all physics shapes
     local bodies = World.physics:getBodyList()
-
     for _, body in pairs(bodies) do
         love.graphics.setColor(255, 0, 0, 100)
 
@@ -22,18 +22,31 @@ function DebugSystem:update(dt)
             local x, y = body:getPosition()
             love.graphics.circle('fill', x, y, shape:getRadius())
 
-            love.graphics.setColor(0, 0, 255)
+            love.graphics.setColor(0, 0, 255, 50)
             local dx = math.cos(body:getAngle())
             local dy = math.sin(body:getAngle())
             local x, y = body:getPosition()
             love.graphics.line(x, y, x + dx * 30, y + dy * 30)
         end
-        
-        love.graphics.setColor(255, 255, 255)
-        local x, y = World.mouse.x, World.mouse.y
-        love.graphics.print('[' .. x .. ', ' .. y .. ']', x + 8, y - 26)
 
     end
+
+    -- draw player hitpoints
+    love.graphics.setColor(255, 255, 0)
+    for _, hp in pairs(World.characters.player.hitpoints) do
+        love.graphics.points(hp.x, hp.y)
+    end
+
+    -- draw enemies fov
+    love.graphics.setColor(0, 255, 0, 50)
+    for _, enemy in pairs(World.characters.enemies) do
+        love.graphics.arc('line', enemy.x, enemy.y, enemy.viewdistance, enemy.maxFoV, enemy.minFoV)
+    end
+        
+    -- mouse position
+    love.graphics.setColor(255, 255, 255, 150)
+    local x, y = World.mouse.x, World.mouse.y
+    love.graphics.print('[' .. x .. ', ' .. y .. ']', x + 8, y - 26)
 end
 
 return DebugSystem

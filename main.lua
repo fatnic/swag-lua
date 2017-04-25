@@ -35,7 +35,6 @@ VisionSystem       = require 'src.systems.vision'
 -- drawing systems
 TileRendererSystem = require 'src.systems.tilerender'
 SpriteSystem       = require 'src.systems.sprite'
-VisionRenderSystem = require 'src.systems.visionrender'
 DebugSystem        = require 'src.systems.debug'
 
 -- system filters
@@ -67,6 +66,7 @@ function love.load(arg)
     World.signals    = require 'ext.signal'
     World.physics    = love.physics.newWorld(0, 0, true)
     World.characters = {}
+    World.characters.enemies = {}
 
     World.ecs:addSystem(WallParserSystem())
     World.ecs:addSystem(WindowParserSystem())
@@ -85,7 +85,6 @@ function love.load(arg)
     World.ecs:addSystem(TileRendererSystem('floor'))
     World.ecs:addSystem(SpriteSystem('characters'))
     World.ecs:addSystem(SpriteSystem('fg'))
-    World.ecs:addSystem(VisionRenderSystem())
     World.ecs:addSystem(TileRendererSystem('windows'))
     World.ecs:addSystem(TileRendererSystem('walls'))
     World.ecs:addSystem(DebugSystem())
@@ -95,6 +94,8 @@ function love.load(arg)
 
     for _, enemy in pairs(require 'enemies') do
         local e = Enemy:new(enemy.x, enemy.y)
+        World.characters.enemies[1] = e
+        e.body:setAngle(enemy.heading)
         World.ecs:addEntity(e)
     end
 
@@ -119,6 +120,6 @@ end
 function love.draw()
     local dt = love.timer.getDelta()
     World.lights:draw(function()
-        World.ecs:update(dt, drawingSystems)
+        World.ecs:update(dt, drawingSystems) 
     end)
 end

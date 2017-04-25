@@ -10,7 +10,10 @@ function Enemy:initialize(x, y, args)
 end
 
 function Enemy:update(dt)
-    if self.target then self:moveTowards(self.target.x, self.target.y) end
+    if self.target then 
+        self:moveTowards(self.target.x, self.target.y) 
+        if tools.distance({ x = self.x, y = self.y }, self.target) < 1 then self.target = nil end
+    end
     Character.update(self, dt)
 end
 
