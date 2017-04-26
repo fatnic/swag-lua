@@ -33,6 +33,19 @@ function tools.distance(v1, v2)
     return math.sqrt(dx * dx + dy * dy)
 end
 
+function tools.dot(v)
+    return v.x * v.x + v.y * v.y
+end
+
+function tools.length(v)
+    return math.sqrt(tools.dot(v))
+end
+
+function tools.normalise(v)
+    local len = tools.length(v)
+    return { x = v.x / len, y = v.y / len } 
+end
+
 function tools.isLineOfSight(p1, p2)
     local hit = false
     World.physics:rayCast(p1.x, p1.y, p2.x, p2.y, function(fixture, x, y, xn, yn, fraction) 

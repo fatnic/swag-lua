@@ -1,8 +1,8 @@
 local enemies = {
     {
-        x = 128,
+        x = 228,
         y = 182,
-        heading = 0,
+        heading = math.pi,
     },
 }
 

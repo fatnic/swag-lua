@@ -47,7 +47,7 @@ end
 
 function Character:update(dt)
     self.x, self.y = self.body:getPosition()
-    self.heading   = self.body:getAngle()
+    self.heading = self.body:getAngle()
 
     self.hitpoints[1] = { x = self.x, y = self.y + self.radius }
     self.hitpoints[2] = { x = self.x, y = self.y - self.radius }
@@ -56,7 +56,6 @@ function Character:update(dt)
 end
 
 function Character:moveTowards(x, y, dt)
-    -- TODO: Make this seeking/arriving behaviour
     local angle = math.atan2(y - self.y, x - self.x)
     local dx, dy = math.cos(angle), math.sin(angle)
     self.body:setAngle(angle)
