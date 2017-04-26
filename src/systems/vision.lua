@@ -29,7 +29,7 @@ function VisionSystem:process(e, dt)
         local pa = tools.normaliseRadian(math.atan2(point.y - e.y, point.x - e.x))
         if tools.isAngleBetween(pa, e.minFoV, e.maxFoV) then
             withinfov = true
-            blocked = not tools.isLineOfSight(e, char)
+            if tools.isLineOfSight(e, point) then blocked = false end
         end
     end
 
