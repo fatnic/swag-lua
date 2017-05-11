@@ -32,6 +32,7 @@ UpdatingSystem     = require 'src.systems.updating'
 CursorSystem       = require 'src.systems.cursor'
 MouseSystem        = require 'src.systems.mouse'
 VisionSystem       = require 'src.systems.vision'
+ShootingSystem     = require 'src.systems.shooting'
 
 -- drawing systems
 TileRendererSystem = require 'src.systems.tilerender'
@@ -83,6 +84,7 @@ function love.load(arg)
     World.ecs:addSystem(CursorSystem())
     World.ecs:addSystem(LightingSystem())
     World.ecs:addSystem(VisionSystem())
+    World.ecs:addSystem(ShootingSystem())
     World.ecs:addSystem(UpdatingSystem())
 
     World.ecs:addSystem(TileRendererSystem('floor'))
@@ -109,12 +111,6 @@ function love.update(dt)
         for _, d in pairs(World.doors) do d:toggle() end
     end
 
-end
-
-function love.mousepressed(x, y, button)
-    if button == 1 and DebugSystem.active then
-        World.characters.player.body:setPosition(x, y)
-    end
 end
 
 function love.draw()

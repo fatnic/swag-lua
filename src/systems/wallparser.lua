@@ -18,6 +18,7 @@ function WallParserSystem:initialize()
         wall.body    = love.physics.newBody(World.physics, wall.x + wall.width / 2, wall.y + wall.height / 2)
         wall.shape   = love.physics.newRectangleShape(wall.width, wall.height)
         wall.fixture = love.physics.newFixture(wall.body, wall.shape)
+        wall.fixture:setUserData({class = 'barrier', identifier = 'wall'})
         table.insert(World.walls, wall)
     end
 
