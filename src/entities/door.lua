@@ -14,7 +14,7 @@ function Door:initialize(x, y, orientation, args)
     self.body    = love.physics.newBody(World.physics, x + self.offset.x + self.width / 2, y + self.offset.y + self.height / 2)
     self.shape   = love.physics.newRectangleShape(self.width, self.height)
     self.fixture = love.physics.newFixture(self.body, self.shape)
-    self.fixture:setUserData({class = 'barrier', identifier = 'door'})
+    self.fixture:setUserData({class = 'barrier', identifier = 'door', uuid = self.uuid})
 
     self.open = false
 

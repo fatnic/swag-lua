@@ -60,8 +60,6 @@ function DebugSystem:update(dt)
     for _, hit in pairs(World.shots) do
         love.graphics.circle('fill', hit.x, hit.y, 4)
     end
-
-    print(World.characters.player.cooldown)
 end
 
 return DebugSystem

@@ -8,7 +8,7 @@ function ControllableSystem:process(e, dt)
     if World.input:down 'left'  then e:moveLeft(dt) end
     if World.input:down 'right' then e:moveRight(dt) end
 
-    if World.mouse.down then e.firing = true end
+    e.firing = World.mouse.down and not World.mouse.hovering
 end
 
 return ControllableSystem

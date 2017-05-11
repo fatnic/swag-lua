@@ -12,7 +12,6 @@ function Player:initialize(x, y, args)
     self.followmouse  = true
     self.collidable   = true
     self.canshoot     = true
-    self.cooldown     = 0
 end
 
 return Player

@@ -77,10 +77,10 @@ function love.load(arg)
     World.ecs:addSystem(CharacterParserSystem())
 
     World.ecs:addSystem(MouseSystem())
-    World.ecs:addSystem(ControllableSystem())
     World.ecs:addSystem(MouseFollowSystem())
     World.ecs:addSystem(LookAtSystem())
     World.ecs:addSystem(InteractableSystem())
+    World.ecs:addSystem(ControllableSystem())
     World.ecs:addSystem(CursorSystem())
     World.ecs:addSystem(LightingSystem())
     World.ecs:addSystem(VisionSystem())
@@ -107,10 +107,6 @@ function love.update(dt)
     World.ecs:update(dt, updateSystems)
 
     if World.input:pressed 'debug' then DebugSystem.active = not DebugSystem.active end
-    if World.input:pressed 'doors' then
-        for _, d in pairs(World.doors) do d:toggle() end
-    end
-
 end
 
 function love.draw()

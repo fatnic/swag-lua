@@ -6,12 +6,16 @@ function ShootingSystem:initialize()
     World.shots = {}
 end
 
+function ShootingSystem:onAdd(entity)
+    entity.shotTimer    = 0
+    entity.shotInterval = 0.45
+end
+
 function ShootingSystem:process(e, dt)
 
-    if e.firing and e.cooldown == 0 then
+    e.shotTimer = math.max(0, e.shotTimer - dt)
 
-        e.cooldown = 10
-        e.firing = false
+    if e.firing and e.shotTimer == 0 then
 
         local angle  = e.body:getAngle()
         local ex, ey = e.body:getPosition()
@@ -25,14 +29,18 @@ function ShootingSystem:process(e, dt)
         end)
 
         local udata = hit.fixture:getUserData()
-        if udata and udata.identifier == 'enemy' then
-            print('you hit enemy ' .. udata.uuid)
+        if udata then
+            if udata.identifier == 'enemy'  then print('you hit enemy ' .. udata.uuid) end
+            if udata.identifier == 'wall'   then print('you hit a wall') end
+            if udata.identifier == 'window' then print('you hit a window') end
+            if udata.identifier == 'door'   then print('you hit a door') end
         end
 
         table.insert(World.shots, hit)
+
+        e.shotTimer = e.shotInterval
     end
 
-    if e.cooldown > 0 then e.cooldown = e.cooldown - 1 end
 
 end
 
