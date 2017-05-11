@@ -2,21 +2,21 @@ local Enemy = class("Enemy", Character)
 
 function Enemy:initialize(x, y, args)
     local args = args or {}
+    args.identifier = 'enemy'
     Character.initialize(self, assets.images.enemy, x, y, args)
     self.body:setFixedRotation(true)
-    self.speed = 350
+    self.speed = 250
     self.hasvision = true
     self.collidable = true
 end
 
 function Enemy:update(dt)
+    local vx, vy = self.body:getLinearVelocity()
+
     if self.target then 
         local desired = tools.normalise({ x = self.target.x - self.x, y = self.target.y - self.y })
         local dx = desired.x * self.speed
         local dy = desired.y * self.speed
-
-        local vx, vy = self.body:getLinearVelocity()
-
         local steering = { x = dx - vx, y = dy - vy }
         self.body:applyForce(steering.x, steering.y)
 
@@ -25,9 +25,10 @@ function Enemy:update(dt)
 
     Character.update(self, dt)
 
-    local dx, dy = self.body:getLinearVelocity()
-    self.heading = math.atan2(dy, dx)
-    self.body:setAngle(self.heading)
+    if (vx ~= 0 and vy ~= 0) then
+        self.heading = math.atan2(vy, vx)
+        self.body:setAngle(self.heading)
+    end
 end
 
 return Enemy

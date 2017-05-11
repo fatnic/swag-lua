@@ -17,7 +17,8 @@ function Character:initialize(image, x, y, args)
     self.shape   = love.physics.newCircleShape(self.radius)
     self.fixture = love.physics.newFixture(self.body, self.shape, 1)
     self.body:setLinearDamping(6)
-
+    local identifier = args.identifier or 'character'
+    self.fixture:setUserData({identifier = identifier})
     self.x, self.y = self.body:getPosition()
 
     self.updatable = true

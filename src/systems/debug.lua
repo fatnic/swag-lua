@@ -37,10 +37,17 @@ function DebugSystem:update(dt)
         love.graphics.points(hp.x, hp.y)
     end
 
-    -- draw enemies fov
-    love.graphics.setColor(0, 255, 0, 50)
+    -- draw enemies
     for _, enemy in pairs(World.characters.enemies) do
+        -- fov 
+        love.graphics.setColor(0, 255, 0, 50)
         love.graphics.arc('line', enemy.x, enemy.y, enemy.viewdistance, enemy.maxFoV, enemy.minFoV)
+        -- identifier
+        local udata = enemy.fixture:getUserData()
+        if udata and udata.identifier then
+            love.graphics.setColor(255, 255, 255)
+            love.graphics.print(udata.identifier .. ' - ' .. enemy.uuid, enemy.x, enemy.y)
+        end
     end
         
     -- mouse position

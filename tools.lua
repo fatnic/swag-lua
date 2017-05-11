@@ -46,11 +46,17 @@ function tools.normalise(v)
     return { x = v.x / len, y = v.y / len } 
 end
 
-function tools.isLineOfSight(p1, p2)
+function tools.isLineOfSight(p1, p2, ignore)
+    World.lines = {}
+    local ignore = ignore or {'character'}
     local hit = false
     World.physics:rayCast(p1.x, p1.y, p2.x, p2.y, function(fixture, x, y, xn, yn, fraction) 
-        local shape = fixture:getShape()
-        if shape:getType() == 'circle' then return 1 end
+        local userdata = fixture:getUserData()
+        if userdata and userdata.class then
+            for _, i in pairs(ignore) do
+                if userdata.class == i then return 1 end
+            end
+        end
         hit = true
         return 1
     end)

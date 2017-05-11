@@ -6,7 +6,7 @@ function Interactable:initialize(x, y, command, args)
     self.y = y
     self.command = command
     self.range = args.range or nil
-    self.los = true
+    self.los = args.los or true
     self.interactive = true
 end
 
@@ -19,7 +19,11 @@ function Interactable:withinRange(character)
 end
 
 function Interactable:isLineOfSight(character)
-    return tools.isLineOfSight(character, self)
+    if self.los then
+        return tools.isLineOfSight(character, self)
+    else 
+        return true
+    end
 end
 
 function Interactable:activate()

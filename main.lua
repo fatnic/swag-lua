@@ -1,26 +1,27 @@
 -- external libraries
-class    = require 'ext.middleclass'
-tiny     = require 'ext.tiny'
-sti      = require 'ext.sti'
-baton    = require 'ext.baton'
-lume     = require 'ext.lume'
-flux     = require 'ext.flux'
-log      = require 'ext.log'
-ParseImg = require 'ext.parseimg'
+class      = require 'ext.middleclass'
+tiny       = require 'ext.tiny'
+sti        = require 'ext.sti'
+baton      = require 'ext.baton'
+lume       = require 'ext.lume'
+flux       = require 'ext.flux'
+log        = require 'ext.log'
+ParseImg   = require 'ext.parseimg'
 LightWorld = require 'ext.lightworld'
 
 -- local libraries
-Wall   = require 'libs.wall'
+Wall       = require 'libs.wall'
 PixelMerge = require 'libs.pixelmerge'
 
 -- helpers
 tools = require 'tools'
 
 -- parser systems
-WallParserSystem   = require 'src.systems.wallparser'
-WindowParserSystem = require 'src.systems.windowparser'
-DoorParserSystem   = require 'src.systems.doorparser'
-LightingSystem     = require 'src.systems.lighting'
+WallParserSystem      = require 'src.systems.wallparser'
+WindowParserSystem    = require 'src.systems.windowparser'
+DoorParserSystem      = require 'src.systems.doorparser'
+CharacterParserSystem = require 'src.systems.characterparser'
+LightingSystem        = require 'src.systems.lighting'
 
 -- update systems
 ControllableSystem = require 'src.systems.controllable'
@@ -65,12 +66,14 @@ function love.load(arg)
     World.input      = baton.new(keys)
     World.signals    = require 'ext.signal'
     World.physics    = love.physics.newWorld(0, 0, true)
+
     World.characters = {}
     World.characters.enemies = {}
 
     World.ecs:addSystem(WallParserSystem())
     World.ecs:addSystem(WindowParserSystem())
     World.ecs:addSystem(DoorParserSystem())
+    World.ecs:addSystem(CharacterParserSystem())
 
     World.ecs:addSystem(MouseSystem())
     World.ecs:addSystem(ControllableSystem())
@@ -89,16 +92,6 @@ function love.load(arg)
     World.ecs:addSystem(TileRendererSystem('walls'))
     World.ecs:addSystem(DebugSystem())
 
-    World.characters.player = Player:new(64, 64)
-    World.ecs:addEntity(World.characters.player)
-
-    for _, enemy in pairs(require 'enemies') do
-        local e = Enemy:new(enemy.x, enemy.y)
-        World.characters.enemies[1] = e
-        e.body:setAngle(enemy.heading)
-        World.ecs:addEntity(e)
-    end
-
     love.mouse.setPosition(World.screen.width / 2, World.screen.height / 2)
 end
 
@@ -114,6 +107,13 @@ function love.update(dt)
     if World.input:pressed 'debug' then DebugSystem.active = not DebugSystem.active end
     if World.input:pressed 'doors' then
         for _, d in pairs(World.doors) do d:toggle() end
+    end
+
+end
+
+function love.mousepressed(x, y, button)
+    if button == 1 and DebugSystem.active then
+        World.characters.player.body:setPosition(x, y)
     end
 end
 
