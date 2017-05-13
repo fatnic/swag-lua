@@ -8,6 +8,7 @@ function Enemy:initialize(x, y, args)
     self.speed = 250
     self.hasvision = true
     self.collidable = true
+    self.stunTimer = 0
 end
 
 function Enemy:update(dt)
@@ -18,17 +19,22 @@ function Enemy:update(dt)
         local dx = desired.x * self.speed
         local dy = desired.y * self.speed
         local steering = { x = dx - vx, y = dy - vy }
-        self.body:applyForce(steering.x, steering.y)
+        if self.stunTimer == 0 then self.body:applyForce(steering.x, steering.y) end
 
         if tools.distance({ x = self.x, y = self.y }, self.target) < 1 then self.target = nil end
     end
 
     Character.update(self, dt)
 
-    if (vx ~= 0 and vy ~= 0) then
+    self.stunTimer = math.max(0, self.stunTimer - dt)
+
+    print(self.stunTimer)
+
+    if (vx ~= 0 and vy ~= 0) and self.stunTimer == 0 then
         self.heading = math.atan2(vy, vx)
         self.body:setAngle(self.heading)
     end
+
 end
 
 return Enemy

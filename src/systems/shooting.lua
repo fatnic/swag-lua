@@ -17,20 +17,31 @@ function ShootingSystem:process(e, dt)
 
     if e.firing and e.shotTimer == 0 then
 
+        assets.sounds.pistol:play({ pitch = 1.4 })
+
         local angle  = e.body:getAngle()
         local ex, ey = e.body:getPosition()
-        local dx = ex + math.cos(angle) * 1000
-        local dy = ey + math.sin(angle) * 1000
+        local dx = math.cos(angle) 
+        local dy = math.sin(angle)
 
         local hit = {}
-        World.physics:rayCast(ex, ey, dx, dy, function(fixture, x, y, nx, ny, fraction) 
+        World.physics:rayCast(ex, ey, ex + dx * 1000, ey + dy * 1000, function(fixture, x, y, nx, ny, fraction) 
             hit = { x = x, y = y, fixture = fixture }
             return fraction
         end)
+        hit.dx = dx
+        hit.dy = dy
 
+        local bulletforce = 50
         local udata = hit.fixture:getUserData()
         if udata then
-            if udata.identifier == 'enemy'  then print('you hit enemy ' .. udata.uuid) end
+
+            if udata.identifier == 'enemy'  then 
+                local enemy = World.characters.enemies[udata.uuid]
+                enemy.stunTimer = 2
+                enemy.body:applyLinearImpulse(hit.dx * bulletforce, hit.dy * bulletforce)
+            end
+
             if udata.identifier == 'wall'   then print('you hit a wall') end
             if udata.identifier == 'window' then print('you hit a window') end
             if udata.identifier == 'door'   then print('you hit a door') end
@@ -40,7 +51,6 @@ function ShootingSystem:process(e, dt)
 
         e.shotTimer = e.shotInterval
     end
-
 
 end
 

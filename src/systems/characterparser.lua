@@ -7,8 +7,8 @@ function CharacterParserSystem:initialize()
 
     for _, enemy in pairs(require 'enemies') do
         local e = Enemy:new(enemy.x, enemy.y)
-        table.insert(World.characters.enemies, e)
         e.body:setAngle(math.rad(enemy.heading))
+        World.characters.enemies[e.uuid] = e
         World.ecs:addEntity(e)
     end
 
